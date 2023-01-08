@@ -31,21 +31,21 @@ public class CustomExecutor {
     // Method for creating a Task instance from a Callable and submitting it
     public <T> Future<T> submit(Callable<T> callable, TaskType type) {
 
-        Task<T> task = new Task<>(callable, type);
+        Task<T> task = Task.createTask(callable,type);
 
         maxPriority = Math.max(maxPriority, task.prio);
 
-       return this.submit(task);
+        return this.submit(task);
     }
 
     // Method for creating a Task instance from a Callable and submitting it
     public <T> Future<T> submit(Callable<T> callable) {
 
-        Task<T> task = new Task<T>(Task.createTask(callable));
+        Task<T> task = Task.createTask(callable);
 
         maxPriority = Math.max(maxPriority, task.prio);
 
-         return this.submit(task);
+        return this.submit(task);
     }
 
     // Method for returning the maximum priority in the queue in O(1) time and space complexity
