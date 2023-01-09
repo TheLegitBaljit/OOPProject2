@@ -1,6 +1,6 @@
 import java.util.concurrent.Callable;
 
-public class Task<T> implements Callable<T>,Comparable<Task<T>>{
+public class Task<T> implements Callable<T>{
     private Callable<T> operation;
     public int prio;
 
@@ -28,14 +28,5 @@ public class Task<T> implements Callable<T>,Comparable<Task<T>>{
     public T call() throws Exception {
         return this.operation.call();
     }
-
-	@Override
-	public int compareTo(Task<T> other) {
-		if(this.prio<other.prio)
-			return -1;
-		else if (this.prio>other.prio)
-			return 1;
-		return 0;
-	}
 
 }

@@ -1,9 +1,12 @@
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.concurrent.*;
+
 import java.util.concurrent.*;
 
 public class CustomExecutor {
-    private final PriorityBlockingQueue<Runnable> queue;
-    private final ThreadPoolExecutor executor;
+    private PriorityBlockingQueue<Runnable> queue;
+    private ThreadPoolExecutor executor;
     private int maxPriority;
 
     public CustomExecutor() {
@@ -14,8 +17,11 @@ public class CustomExecutor {
 
         long AliveTime = 300;
 
-        queue = new PriorityBlockingQueue<>();
-
+        queue = new PriorityBlockingQueue<>(11, (r1, r2) -> {
+            Task t1 = (Task) r1;
+            Task t2 = (Task) r2;
+            return Integer.compare(t1.prio, t2.prio);
+        });
         executor = new ThreadPoolExecutor(minimumPoolSize, maximumPoolSize, AliveTime, TimeUnit.MILLISECONDS, queue);
 
         maxPriority = Integer.MIN_VALUE;
@@ -25,15 +31,19 @@ public class CustomExecutor {
     public <T> Future<T> submit(Task<T> task) {
         // Update the maximum priority if necessary
         maxPriority = Math.max(maxPriority, task.prio);
-        return executor.submit(task);
+
+        // Create a FutureTask that wraps the Task
+        FutureTask<T> futureTask = new FutureTask<>(task);
+
+        this.executor.submit(futureTask);
+        // Submit the FutureTask to the ThreadPoolExecutor
+        return futureTask ;
     }
 
     // Method for creating a Task instance from a Callable and submitting it
     public <T> Future<T> submit(Callable<T> callable, TaskType type) {
 
         Task<T> task = Task.createTask(callable,type);
-
-        maxPriority = Math.max(maxPriority, task.prio);
 
         return this.submit(task);
     }
@@ -43,16 +53,10 @@ public class CustomExecutor {
 
         Task<T> task = Task.createTask(callable);
 
-        maxPriority = Math.max(maxPriority, task.prio);
-
+        // Submit the FutureTask to the ThreadPoolExecutor
         return this.submit(task);
     }
 
-    // Method for returning the maximum priority in the queue in O(1) time and space complexity
-    public int getMaxPriority()
-    {
-        return this.maxPriority;
-    }
     //Method for terminating the Pool
     public void gracefullyTerminate() {
         executor.shutdown();
