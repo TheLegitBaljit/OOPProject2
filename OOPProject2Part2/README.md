@@ -11,6 +11,8 @@ In this project we used a design pattern which is called Factory Method Design P
 
 We used it in the Task class so it will be more understandable to create a Task object, without revealing the creational logic behind it.
 
+In addition, we used Adapter design pattern so we can sort the Task objects which are type Callable in the priority queue which is type Runnable.
+
 Here are the main difficulties we encountered while working on the project:
 
 1. We were not sure how the sort the tasks in the thread pool by their priority. we solved it by using the Comparable interface,
