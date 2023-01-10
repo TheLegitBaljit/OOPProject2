@@ -33,5 +33,5 @@ The use of custom thread pool contributed to the performance flexibility, and ma
 The queue sorts the tasks automatically by their given priority. In addition, we get the maxPriority in O(1) complexity of time and space.
 
 Moreover, the user does not specify the type of the task since the task class is generic, also creating it with lambda expressions.
-![UML](https://user-images.githubusercontent.com/85311237/210644858-705303f8-e217-4056-bef8-e677a90064e4.png)
+![UML](https://user-images.githubusercontent.com/85311237/211542792-30ee741e-b156-4348-9348-8e07c871e373.png)
 
