@@ -15,17 +15,15 @@ In addition, we used Adapter design pattern so we can sort the Task objects whic
 
 Here are the main difficulties we encountered while working on the project:
 
-1. We were not sure how the sort the tasks in the thread pool by their priority. we solved it by using the Comparable interface,
+1. We were not sure how the sort the tasks in the thread pool by their priority. we solved it by using the Adapter: OtherFuture,
 
-we implemented the compareTo function in the task class and then as soon as new task is added to a thread pool, it will be sorted
+we implemented the compareTo function in this class and then as soon as new task is added to a thread pool, it will be incremented in the array
 
-in the right position in the priority queue.
+in the right position we also decremented the right index when the task is completed, because the max is now updated.
 
-2. Were not sure how to get the max priority in the queue without accessing the queue itself. We solved it by creating a new instance 
+2. Were not sure how to get the max priority in the queue without accessing the queue itself. We solved it by creating a new array 
 
-in the class called "maxPriority" , and each time a task is submitted to the queue, we check if the current task added, has a higher 
-
-priority value than the value of "maxPriorty", and we update it if neccessary.
+in the class called "maxPriority" , and each time a task is submitted to the queue, we increment the right cell.
 
 
 The use of custom thread pool contributed to the performance flexibility, and maintainbility, by executing the higher priority tasks first.
